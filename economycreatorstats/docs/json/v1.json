@@ -1,0 +1,111 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Roblox.EconomyCreatorStats.Api v1",
+    "version": "v1"
+  },
+  "host": "economycreatorstats.roblox.com",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/v1/universes/{universeId}/stats": {
+      "get": {
+        "tags": [
+          "Statistics"
+        ],
+        "summary": "Get statistics data for a universe.",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "universeId",
+            "description": "The universe id.",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "in": "query",
+            "name": "Type",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "PremiumUpsells",
+              "PremiumVisits"
+            ]
+          },
+          {
+            "in": "query",
+            "name": "StartTime",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "in": "query",
+            "name": "EndTime",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Roblox.EconomyCreatorStats.Api.Models.StatisticsResponse"
+            }
+          },
+          "400": {
+            "description": "1: The Universe is invalid.\r\n3: Too many data points requested.\r\n4: The requested data type is not known."
+          },
+          "401": {
+            "description": "0: Authorization has been denied for this request.\r\n2: Not authorized to perform this action."
+          }
+        },
+        "properties": {
+          "internal": false,
+          "metricIds": [
+            "Statistics:GetStatistics"
+          ]
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Roblox.EconomyCreatorStats.Api.Models.StatisticsResponse": {
+      "description": "The response model",
+      "type": "object",
+      "properties": {
+        "dataGranularity": {
+          "format": "int32",
+          "description": "The Roblox.EconomyCreatorStats.Api.StatisticsDataGranularity. ['Hourly' = 0, 'Daily' = 1, 'Monthly' = 2]",
+          "enum": [
+            0,
+            1,
+            2
+          ],
+          "type": "integer"
+        },
+        "data": {
+          "description": "The actual data.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "format": "double",
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
